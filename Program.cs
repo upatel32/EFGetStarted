@@ -1,7 +1,6 @@
-﻿using System.Linq.Expressions;
-using System;
-using EFGetStarted.Models;
+﻿using System;
 using System.IO;
+using EFGetStarted.Models;
 
 namespace EFGetStarted
 {
@@ -9,41 +8,44 @@ namespace EFGetStarted
     {
         static void Main(string[] args)
         {
-            StreamReader sr = new StreamReader("C:/Users/upatel/Desktop/workoutparse/EFGetStarted/oldWorkoutLogs.txt");
+            string year = args[0];
+            Console.WriteLine(year);
+            StreamReader sr = new StreamReader($"/Users/vimana/Desktop/Projects/EFGetStarted/{year}.txt");
             string[] read;
             string line;
             string currentDay;
-            string currentDate;
+            DateTimeOffset currentDate;
             string currentExercise;
 
             while ((line = sr.ReadLine()) != null)
             {
                 line = line.Trim();
+                line = line.ToLower();
                 if (line.Contains("day"))
                 {
                     currentDay = line;
-                    Console.WriteLine(line);
+                    Console.WriteLine(currentDay);
                 }
                 else if (line.Contains("/"))
                 {
-                    currentDate = line;
+                    line = line.Insert(line.Length, $"/{year}");
+                    currentDate = DateTimeOffset.Parse(line);
+                    Console.WriteLine(currentDate);
                 }
                 else if (!line.Contains("x"))
                 {
                     currentExercise = line;
+                    Console.WriteLine(currentExercise);
                 }
                 else
                 {
-                    var line.Split('x');
+                    var set = line.Split('x');
+                    Console.WriteLine("weight " + set[0] + "lbs for " + set[1] + " reps");
                 }
             }
             using (var db = new WorkoutContext())
             {
                 Console.WriteLine();
-                // db.Add(new Exercise
-                // {
-
-                // });
             }
         }
     }
